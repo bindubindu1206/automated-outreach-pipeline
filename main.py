@@ -1,6 +1,5 @@
 from services.ocean import get_similar_companies
 from services.prospeo import find_contacts
-from services.eazyreach import get_email
 from services.brevo import send_email
 
 from utils.lead_scoring import calculate_score
@@ -22,7 +21,7 @@ for company in companies:
 
     for contact in contacts:
 
-        email = get_email(contact["linkedin"])
+        email = contact.get("email", "")
 
         if not email:
             continue
@@ -31,8 +30,6 @@ for company in companies:
             continue
 
         seen_emails.add(email)
-
-        contact["email"] = email
 
         score = calculate_score(
             contact["title"]

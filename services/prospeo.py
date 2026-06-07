@@ -17,15 +17,7 @@ def find_contacts(company):
     payload = {
         "page": 1,
         "filters": {
-            "company_domain": company,
-            "person_seniority": {
-                "include": [
-                    "Founder/Owner",
-                    "C-Level",
-                    "VP",
-                    "Director"
-                ]
-            }
+            "company_domain": company
         }
     }
 
@@ -54,14 +46,22 @@ def find_contacts(company):
 
     results = data.get("results", [])
 
-    for item in results[:5]:
+    for item in results[:10]:
 
         person = item.get("person", {})
+
+        email = (
+            person.get("email")
+            or person.get("work_email")
+            or person.get("email_address")
+            or ""
+        )
 
         contacts.append({
             "name": person.get("full_name", ""),
             "title": person.get("current_job_title", ""),
-            "linkedin": person.get("linkedin_url", "")
+            "linkedin": person.get("linkedin_url", ""),
+            "email": email
         })
 
     print(f"\n===== CONTACTS FOUND FOR {company} =====")
